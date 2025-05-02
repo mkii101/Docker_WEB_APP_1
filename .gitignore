@@ -1,0 +1,26 @@
+# Environment files
+.env
+.env.*
+!.env.example  # Keep example file if needed
+
+# Secret files
+/secrets/
+/docker-secrets/
+secret.txt
+
+# Docker-related
+**/docker-compose.override.yml
+
+# Database files
+/postgres_data/  # Volume data
+*.dump  # Database dumps
+
+# Editor/IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python-specific (if applicable)
+__pycache__/
+*.py[cod]
