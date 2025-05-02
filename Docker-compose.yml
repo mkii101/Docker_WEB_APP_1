@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://root:123456789$@postgres:5432/mydb
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER: root
+      - POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      - POSTGRES_DB: mydb
+      - POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:alpine
+
+secrets:
+  postgres_password:
+    file: ./postgres_password.txt
